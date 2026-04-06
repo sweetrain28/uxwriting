@@ -20,7 +20,7 @@ module.exports = async function handler(req, res) {
             return res.status(400).json({ error: '텍스트가 비어있습니다' });
         }
 
-        const apiKey = process.env.GEMINI_API_KEY;
+        const apiKey = process.env.GROQ_API_KEY;
         if (!apiKey) {
             return res.status(500).json({ error: 'API 키 설정 오류' });
         }
@@ -45,25 +45,30 @@ module.exports = async function handler(req, res) {
   "keyword": "변환된 텍스트"
 }`;
 
-        const geminiRes = await fetch(
-            `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
+        const groqRes = await fetch(
+            'https://api.groq.com/openai/v1/chat/completions',
             {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
                 body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }]
+                    model: 'llama-3.1-8b-instant',
+                    messages: [{ role: 'user', content: prompt }],
+                    temperature: 0.7
                 })
             }
         );
 
-        if (!geminiRes.ok) {
-            const errText = await geminiRes.text();
-            console.error('Gemini API 오류:', errText);
-            throw new Error(`Gemini API 오류: ${geminiRes.status}`);
+        if (!groqRes.ok) {
+            const errText = await groqRes.text();
+            console.error('Groq API 오류:', errText);
+            throw new Error(`Groq API 오류: ${groqRes.status}`);
         }
 
-        const geminiData = await geminiRes.json();
-        const responseText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        const groqData = await groqRes.json();
+        const responseText = groqData.choices?.[0]?.message?.content || '';
 
         let parsedResult;
         try {
