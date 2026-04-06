@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "UX Writing 스타일 변환 API",
   "main": "server.js",
-  "type": "module",
-  "scripts": {
+"scripts": {
     "start": "node server.js",
     "dev": "node server.js"
   },
