@@ -28,7 +28,14 @@ module.exports = async function handler(req, res) {
             return res.status(500).json({ error: 'API 키 설정 오류' });
         }
 
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+        const model = genAI.getGenerativeModel({
+            model: 'gemini-2.5-flash-preview-04-17',
+            generationConfig: {
+                thinkingConfig: {
+                    thinkingBudget: 0
+                }
+            }
+        });
 
         const prompt = `다음 텍스트를 5가지 UX Writing 스타일로 변환해줘. JSON 형식으로만 반환해.
 
