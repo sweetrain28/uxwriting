@@ -1,6 +1,6 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { GoogleGenAI } = require('@google/genai');
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 module.exports = async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -28,15 +28,6 @@ module.exports = async function handler(req, res) {
             return res.status(500).json({ error: 'API 키 설정 오류' });
         }
 
-        const model = genAI.getGenerativeModel({
-            model: 'gemini-2.5-flash-preview-04-17',
-            generationConfig: {
-                thinkingConfig: {
-                    thinkingBudget: 0
-                }
-            }
-        });
-
         const prompt = `다음 텍스트를 5가지 UX Writing 스타일로 변환해줘. JSON 형식으로만 반환해.
 
 원본 텍스트: "${text}"
@@ -57,8 +48,15 @@ module.exports = async function handler(req, res) {
   "keyword": "변환된 텍스트"
 }`;
 
-        const result = await model.generateContent(prompt);
-        const responseText = result.response.text();
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash-preview-04-17',
+            contents: prompt,
+            config: {
+                thinkingConfig: { thinkingBudget: 0 }
+            }
+        });
+
+        const responseText = response.text;
 
         let parsedResult;
         try {

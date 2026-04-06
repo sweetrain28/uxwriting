@@ -2,6 +2,6 @@
   "name": "ux-writing-converter",
   "version": "1.0.0",
   "dependencies": {
-    "@google/generative-ai": "^0.24.0"
+    "@google/genai": "^1.0.0"
   }
 }
