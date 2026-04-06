@@ -132,20 +132,22 @@
             background: none;
             border: none;
             cursor: pointer;
+            color: #aaa;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            border-radius: 4px;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .copy-btn:hover {
             color: #0066ff;
-            padding: 4px 8px;
-            font-size: 12px;
-            font-weight: 500;
-            opacity: 0;
-            transition: opacity 0.2s;
+            background: #f0f5ff;
         }
 
-        .result-item:hover .copy-btn {
-            opacity: 1;
-        }
-
-        .copy-btn:active {
-            color: #0052cc;
+        .copy-btn.copied {
+            color: #22c55e;
         }
 
         .guide {
@@ -232,33 +234,7 @@
             <p class="subtitle">텍스트를 입력하면 5가지 스타일로 변환된 결과를 확인할 수 있습니다</p>
         </header>
 
-        <div class="guide">
-            <h3>📌 변환 스타일 설명</h3>
-            <div class="style-info">
-                <div class="style-card">
-                    <strong>😊 친절한 버전</strong>
-                    <em>따뜻하고 격려하는 톤. 사용자를 지지하고 응원하는 선배의 목소리</em>
-                </div>
-                <div class="style-card">
-                    <strong>😎 캐주얼한 버전</strong>
-                    <em>친구 같은 편한 톤. 해요체 사용, 거리감 없고 직설적</em>
-                </div>
-                <div class="style-card">
-                    <strong>🤝 정중한 버전</strong>
-                    <em>표준 존댓말. 전문적이면서도 친근하고 신뢰도 있는 표현</em>
-                </div>
-                <div class="style-card">
-                    <strong>🎩 경어 버전</strong>
-                    <em>공식적이고 정중한 경어 사용. 높은 신뢰도와 형식성</em>
-                </div>
-                <div class="style-card">
-                    <strong>📝 단어형</strong>
-                    <em>문장이 아닌 명사/키워드 위주. 간결하고 직관적</em>
-                </div>
-            </div>
-        </div>
-
-        <div class="main">
+<div class="main">
             <div class="panel">
                 <h2>📥 원본 텍스트</h2>
                 <textarea id="inputText" placeholder="여기에 변환할 텍스트를 입력하세요&#10;예: 계좌이체가 불가능합니다&#10;예: 오류가 발생했으니 다시 시도해주세요"></textarea>
@@ -271,35 +247,35 @@
                     <div class="result-item">
                         <div class="result-label">
                             😊 친절한 버전
-                            <button class="copy-btn" onclick="copyText(event, 'friendly')">복사</button>
+                            <button class="copy-btn" onclick="copyText(event, 'friendly')" title="복사"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
                         </div>
                         <div class="result-text result-empty" id="friendly">입력 대기 중...</div>
                     </div>
                     <div class="result-item">
                         <div class="result-label">
                             😎 캐주얼한 버전
-                            <button class="copy-btn" onclick="copyText(event, 'casual')">복사</button>
+                            <button class="copy-btn" onclick="copyText(event, 'casual')" title="복사"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
                         </div>
                         <div class="result-text result-empty" id="casual">입력 대기 중...</div>
                     </div>
                     <div class="result-item">
                         <div class="result-label">
                             🤝 정중한 버전
-                            <button class="copy-btn" onclick="copyText(event, 'polite')">복사</button>
+                            <button class="copy-btn" onclick="copyText(event, 'polite')" title="복사"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
                         </div>
                         <div class="result-text result-empty" id="polite">입력 대기 중...</div>
                     </div>
                     <div class="result-item">
                         <div class="result-label">
                             🎩 경어 버전
-                            <button class="copy-btn" onclick="copyText(event, 'formal')">복사</button>
+                            <button class="copy-btn" onclick="copyText(event, 'formal')" title="복사"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
                         </div>
                         <div class="result-text result-empty" id="formal">입력 대기 중...</div>
                     </div>
                     <div class="result-item">
                         <div class="result-label">
                             📝 단어형
-                            <button class="copy-btn" onclick="copyText(event, 'keyword')">복사</button>
+                            <button class="copy-btn" onclick="copyText(event, 'keyword')" title="복사"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
                         </div>
                         <div class="result-text result-empty" id="keyword">입력 대기 중...</div>
                     </div>
@@ -516,18 +492,22 @@
             return result || text;
         }
 
+        const copyIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+        const checkIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+
         function copyText(event, styleId) {
             event.preventDefault();
             const element = document.getElementById(styleId);
             const text = element.textContent;
+            const btn = event.currentTarget;
 
             if (text && text !== '입력 대기 중...' && text !== '변환 중...') {
                 navigator.clipboard.writeText(text).then(() => {
-                    const btn = event.target;
-                    const originalText = btn.textContent;
-                    btn.textContent = '✓ 복사됨';
+                    btn.innerHTML = checkIcon;
+                    btn.classList.add('copied');
                     setTimeout(() => {
-                        btn.textContent = originalText;
+                        btn.innerHTML = copyIcon;
+                        btn.classList.remove('copied');
                     }, 1500);
                 });
             }
