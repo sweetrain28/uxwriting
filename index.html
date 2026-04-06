@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX Writing 스타일 변환기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        textarea {
+            flex: 1;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.6;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #0066ff;
+            box-shadow: 0 0 0 3px rgba(0,102,255,0.1);
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .result-item {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.2s;
+        }
+
+        .result-item:hover {
+            background: #fff;
+            border-color: #0066ff;
+            box-shadow: 0 2px 8px rgba(0,102,255,0.1);
+        }
+
+        .result-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0066ff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .result-text {
+            font-size: 15px;
+            color: #1a1a1a;
+            line-height: 1.6;
+            word-break: break-word;
+            min-height: 24px;
+        }
+
+        .result-empty {
+            color: #999;
+            font-style: italic;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #0066ff;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .result-item:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .copy-btn:active {
+            color: #0052cc;
+        }
+
+        .guide {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .guide h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .style-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .style-card {
+            padding: 12px;
+            background: #fafafa;
+            border-radius: 8px;
+            border-left: 3px solid #0066ff;
+        }
+
+        .style-card strong {
+            display: block;
+            color: #1a1a1a;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .style-card em {
+            color: #666;
+            font-size: 12px;
+            font-style: normal;
+        }
+
+        .loading {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .main {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .style-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .error-message {
+            color: #d32f2f;
+            font-size: 12px;
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: #ffebee;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>UX Writing 스타일 변환기</h1>
+            <p class="subtitle">텍스트를 입력하면 5가지 스타일로 변환된 결과를 확인할 수 있습니다</p>
+        </header>
+
+        <div class="guide">
+            <h3>📌 변환 스타일 설명</h3>
+            <div class="style-info">
+                <div class="style-card">
+                    <strong>😊 친절한 버전</strong>
+                    <em>따뜻하고 격려하는 톤. 사용자를 지지하고 응원하는 선배의 목소리</em>
+                </div>
+                <div class="style-card">
+                    <strong>😎 캐주얼한 버전</strong>
+                    <em>친구 같은 편한 톤. 해요체 사용, 거리감 없고 직설적</em>
+                </div>
+                <div class="style-card">
+                    <strong>🤝 정중한 버전</strong>
+                    <em>표준 존댓말. 전문적이면서도 친근하고 신뢰도 있는 표현</em>
+                </div>
+                <div class="style-card">
+                    <strong>🎩 경어 버전</strong>
+                    <em>공식적이고 정중한 경어 사용. 높은 신뢰도와 형식성</em>
+                </div>
+                <div class="style-card">
+                    <strong>📝 단어형</strong>
+                    <em>문장이 아닌 명사/키워드 위주. 간결하고 직관적</em>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="panel">
+                <h2>📥 원본 텍스트</h2>
+                <textarea id="inputText" placeholder="여기에 변환할 텍스트를 입력하세요&#10;예: 계좌이체가 불가능합니다&#10;예: 오류가 발생했으니 다시 시도해주세요"></textarea>
+                <div class="error-message" id="errorMsg"></div>
+            </div>
+
+            <div class="panel">
+                <h2>📤 변환 결과</h2>
+                <div class="results" id="results">
+                    <div class="result-item">
+                        <div class="result-label">
+                            😊 친절한 버전
+                            <button class="copy-btn" onclick="copyText(event, 'friendly')">복사</button>
+                        </div>
+                        <div class="result-text result-empty" id="friendly">입력 대기 중...</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">
+                            😎 캐주얼한 버전
+                            <button class="copy-btn" onclick="copyText(event, 'casual')">복사</button>
+                        </div>
+                        <div class="result-text result-empty" id="casual">입력 대기 중...</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">
+                            🤝 정중한 버전
+                            <button class="copy-btn" onclick="copyText(event, 'polite')">복사</button>
+                        </div>
+                        <div class="result-text result-empty" id="polite">입력 대기 중...</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">
+                            🎩 경어 버전
+                            <button class="copy-btn" onclick="copyText(event, 'formal')">복사</button>
+                        </div>
+                        <div class="result-text result-empty" id="formal">입력 대기 중...</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">
+                            📝 단어형
+                            <button class="copy-btn" onclick="copyText(event, 'keyword')">복사</button>
+                        </div>
+                        <div class="result-text result-empty" id="keyword">입력 대기 중...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const inputText = document.getElementById('inputText');
+        const errorMsg = document.getElementById('errorMsg');
+
+        // 입력 이벤트 리스너
+        inputText.addEventListener('input', debounce(convertText, 300));
+
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        async function convertText() {
+            const text = inputText.value.trim();
+            errorMsg.classList.remove('show');
+
+            if (!text) {
+                // 입력이 없으면 초기 상태로
+                document.getElementById('friendly').innerHTML = '<span class="result-empty">입력 대기 중...</span>';
+                document.getElementById('casual').innerHTML = '<span class="result-empty">입력 대기 중...</span>';
+                document.getElementById('polite').innerHTML = '<span class="result-empty">입력 대기 중...</span>';
+                document.getElementById('formal').innerHTML = '<span class="result-empty">입력 대기 중...</span>';
+                document.getElementById('keyword').innerHTML = '<span class="result-empty">입력 대기 중...</span>';
+                return;
+            }
+
+            // 로딩 상태
+            const ids = ['friendly', 'casual', 'polite', 'formal', 'keyword'];
+            ids.forEach(id => {
+                document.getElementById(id).innerHTML = '<span class="loading">변환 중...</span>';
+            });
+
+            try {
+                const response = await fetch('http://localhost:3000/api/convert', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text })
+                });
+
+                if (!response.ok) {
+                    throw new Error('변환 실패');
+                }
+
+                const result = await response.json();
+
+                // 결과 표시
+                document.getElementById('friendly').textContent = result.friendly || '';
+                document.getElementById('casual').textContent = result.casual || '';
+                document.getElementById('polite').textContent = result.polite || '';
+                document.getElementById('formal').textContent = result.formal || '';
+                document.getElementById('keyword').textContent = result.keyword || '';
+
+            } catch (error) {
+                console.error('Error:', error);
+                errorMsg.textContent = '⚠️ 서버 연결 실패. 백엔드 서버가 실행 중인지 확인하세요.';
+                errorMsg.classList.add('show');
+
+                // 오프라인 모드로 변환
+                convertOffline(text);
+            }
+        }
+
+        function convertOffline(text) {
+            // 기본 규칙 기반 변환 (서버 없이 작동)
+            const result = {
+                friendly: convertToFriendly(text),
+                casual: convertToCasual(text),
+                polite: convertToPolite(text),
+                formal: convertToFormal(text),
+                keyword: convertToKeyword(text)
+            };
+
+            document.getElementById('friendly').textContent = result.friendly;
+            document.getElementById('casual').textContent = result.casual;
+            document.getElementById('polite').textContent = result.polite;
+            document.getElementById('formal').textContent = result.formal;
+            document.getElementById('keyword').textContent = result.keyword;
+        }
+
+        function convertToFriendly(text) {
+            // 친절한 버전: 따뜻하고 격려하는 톤
+            let result = text;
+            const replacements = {
+                '불가능합니다': '안 돼요. 어떻게 도와줄까요?',
+                '실패했습니다': '잠깐 문제가 생겼어요. 다시 한 번 시도해볼까요?',
+                '오류가 발생했습니다': '어라, 뭔가 이상해요. 우리가 함께 해결해볼게요',
+                '할 수 없습니다': '지금은 어렵지만, 다른 방법이 있어요',
+                '거부되었습니다': '아쉽지만 안 돼요. 혹시 다른 방법을 원하세요?',
+                '삭제': '앗, 잠깐! 정말 지울거예요?',
+                '확인': '맞나요?',
+                '완료되었습니다': '완벽해요! 잘했어요 👏',
+                '없습니다': '아직 없네요. 곧 있을 거예요!',
+                '되었습니다': '됐어요! 이제 편하게 써보세요'
+            };
+
+            Object.entries(replacements).forEach(([key, value]) => {
+                result = result.replace(new RegExp(key, 'g'), value);
+            });
+
+            return result || text;
+        }
+
+        function convertToCasual(text) {
+            // 캐주얼한 버전: 친구 같은 해요체
+            let result = text;
+            const replacements = {
+                '불가능합니다': '안 돼',
+                '실패했습니다': '실패했어',
+                '오류가 발생했습니다': '에러 났어',
+                '할 수 없습니다': '못해',
+                '거부되었습니다': '거절됐어',
+                '삭제': '지울까?',
+                '확인하세요': '확인해',
+                '완료되었습니다': '끝!',
+                '없습니다': '없어',
+                '되었습니다': '됐어',
+                '이용하세요': '써봐',
+                '필요합니다': '필요해'
+            };
+
+            Object.entries(replacements).forEach(([key, value]) => {
+                result = result.replace(new RegExp(key, 'g'), value);
+            });
+
+            // 존댓말 해요체로 통일
+            result = result.replace(/습니다/g, '어요');
+            result = result.replace(/습니까/g, '어요?');
+            result = result.replace(/하세요/g, '해요');
+
+            return result || text;
+        }
+
+        function convertToPolite(text) {
+            // 정중한 버전: 표준 존댓말
+            let result = text;
+            const replacements = {
+                '불가능합니다': '불가능해요',
+                '실패했습니다': '실패했어요',
+                '오류가 발생했습니다': '오류가 발생했어요',
+                '할 수 없습니다': '할 수 없어요',
+                '거부되었습니다': '거부되었어요',
+                '없습니다': '없어요',
+                '되었습니다': '되었어요',
+                '이용하세요': '이용해요',
+                '필요합니다': '필요해요'
+            };
+
+            Object.entries(replacements).forEach(([key, value]) => {
+                result = result.replace(new RegExp(key, 'g'), value);
+            });
+
+            return result || text;
+        }
+
+        function convertToFormal(text) {
+            // 경어 버전: 공식적이고 정중한 경어
+            let result = text;
+            const replacements = {
+                '불가능합니다': '불가능하십니다',
+                '실패했습니다': '실패하였습니다',
+                '오류가 발생했습니다': '오류가 발생하였습니다',
+                '할 수 없습니다': '할 수 없습니다',
+                '거부되었습니다': '거부되었습니다',
+                '없습니다': '없습니다',
+                '되었습니다': '되었습니다',
+                '이용하세요': '이용하시기 바랍니다',
+                '필요합니다': '필요합니다',
+                '하세요': '하시기 바랍니다'
+            };
+
+            Object.entries(replacements).forEach(([key, value]) => {
+                result = result.replace(new RegExp(key, 'g'), value);
+            });
+
+            return result || text;
+        }
+
+        function convertToKeyword(text) {
+            // 단어형: 명사/키워드 위주
+            let result = text;
+
+            // 조사 제거
+            result = result.replace(/이\s+/g, '');
+            result = result.replace(/가\s+/g, '');
+            result = result.replace(/을\s+/g, '');
+            result = result.replace(/를\s+/g, '');
+            result = result.replace(/에\s+/g, '');
+            result = result.replace(/와\s+/g, ' · ');
+
+            // 동사 형식 제거
+            result = result.replace(/되었습니다/g, '완료');
+            result = result.replace(/불가능합니다/g, '불가');
+            result = result.replace(/실패했습니다/g, '실패');
+            result = result.replace(/오류\s+발생/g, '오류');
+            result = result.replace(/없습니다/g, '미지원');
+
+            // 중복 제거 및 정제
+            result = result
+                .split(/[\s.,;!?:]+/)
+                .filter(word => word.length > 0)
+                .join(' · ');
+
+            return result || text;
+        }
+
+        function copyText(event, styleId) {
+            event.preventDefault();
+            const element = document.getElementById(styleId);
+            const text = element.textContent;
+
+            if (text && text !== '입력 대기 중...' && text !== '변환 중...') {
+                navigator.clipboard.writeText(text).then(() => {
+                    const btn = event.target;
+                    const originalText = btn.textContent;
+                    btn.textContent = '✓ 복사됨';
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                    }, 1500);
+                });
+            }
+        }
+
+        // 초기 로드
+        convertText();
+    </script>
+</body>
+</html>

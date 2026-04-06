@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:developers-apps-in-toss.toss.im)",
+      "WebFetch(domain:design.samsung.com)",
+      "WebFetch(domain:blog.goorm.io)",
+      "WebFetch(domain:jlworks.cool)",
+      "Bash(npm install:*)",
+      "Bash(npm start:*)",
+      "Bash(npx kill-port:*)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(netstat -ano)",
+      "Bash(tasklist:*)",
+      "Bash(cmd.exe:*)",
+      "Bash(kill:*)",
+      "Bash(powershell:*)"
+    ]
+  }
+}
