@@ -1,7 +1,4 @@
 {
   "name": "ux-writing-converter",
-  "version": "1.0.0",
-  "dependencies": {
-    "@google/genai": "^1.0.0"
-  }
+  "version": "1.0.0"
 }

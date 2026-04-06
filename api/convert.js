@@ -1,10 +1,3 @@
-const { GoogleGenAI } = require('@google/genai');
-
-const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY,
-    httpOptions: { apiVersion: 'v1alpha' }
-});
-
 module.exports = async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -27,7 +20,8 @@ module.exports = async function handler(req, res) {
             return res.status(400).json({ error: '텍스트가 비어있습니다' });
         }
 
-        if (!process.env.GEMINI_API_KEY) {
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
             return res.status(500).json({ error: 'API 키 설정 오류' });
         }
 
@@ -51,15 +45,25 @@ module.exports = async function handler(req, res) {
   "keyword": "변환된 텍스트"
 }`;
 
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash-preview-04-17',
-            contents: prompt,
-            config: {
-                thinkingConfig: { thinkingBudget: 0 }
+        const geminiRes = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }]
+                })
             }
-        });
+        );
 
-        const responseText = response.text;
+        if (!geminiRes.ok) {
+            const errText = await geminiRes.text();
+            console.error('Gemini API 오류:', errText);
+            throw new Error(`Gemini API 오류: ${geminiRes.status}`);
+        }
+
+        const geminiData = await geminiRes.json();
+        const responseText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
         let parsedResult;
         try {
