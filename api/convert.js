@@ -25,7 +25,7 @@ module.exports = async function handler(req, res) {
             return res.status(500).json({ error: 'API 키 설정 오류' });
         }
 
-        const prompt = mode === 'toss' ? getTossPrompt(text) : getKbPrompt(text);
+        const prompt = mode === 'toss' ? getTossPrompt(text) : mode === 'sinhan' ? getSinhanPrompt(text) : getKbPrompt(text);
 
         const groqRes = await fetch(
             'https://api.groq.com/openai/v1/chat/completions',
@@ -60,6 +60,8 @@ module.exports = async function handler(req, res) {
         } catch (e) {
             if (mode === 'toss') {
                 parsedResult = { toss: text };
+            } else if (mode === 'sinhan') {
+                parsedResult = { sinhan: text };
             } else {
                 parsedResult = { hapsyo: text, haeyo: text, noun: text, banmal: text };
             }
@@ -130,6 +132,51 @@ JSON만 반환:
   "haeyo": "변환된 텍스트",
   "noun": "변환된 텍스트",
   "banmal": "변환된 텍스트"
+}`;
+}
+
+function getSinhanPrompt(text) {
+    return `너는 신한카드 UX 라이터야. 아래 원문을 신한카드 UX Writing 가이드에 따라 다시 써줘.
+
+[절대 규칙]
+- 원문의 모든 정보와 의미를 빠짐없이 유지할 것 (내용 삭제 금지)
+- 원문에 없는 감탄사, 설명, 추가 문장 넣지 말 것
+- 자연스러운 한국어 어순을 지킬 것 (번역투 금지)
+
+[신한카드 UX Writing 원칙]
+1. 문체: 하십시오체(~합니다) 기본, 행동 유도 시 해요체(~하세요/~해보세요) 병용 가능
+2. 과도한 높임말 제거:
+   - '~하시면 ~하실 수 있습니다' → '~하면 ~할 수 있습니다' (주어 없는 안내)
+   - '-시' 중복 사용 금지
+3. 긍정형 우선:
+   - '불가', '불가능' → '할 수 없습니다'
+   - '~이 안 된다' → '이렇게 해보세요' 또는 긍정형으로
+   - 단, 명확한 부정 안내가 필요한 경우 예외
+4. 짧고 간결하게:
+   - 군더더기 제거: '정말', '참', '매우' 등 부사어 삭제
+   - '~처리', '~적용', '~완료' 등 서술어 덧붙임 제거
+   - '비밀번호 변경이 완료되었습니다' → '비밀번호가 변경되었습니다'
+5. 전문·내부 용어 → 쉬운 말:
+   - '내점/내방' → '방문', '상이하다' → '다르다', '익일/익월' → '다음날/다음달'
+   - '통보/통지' → '알림', '구비서류' → '준비서류', '절사' → '끊어서 계산'
+6. 번역투 제거:
+   - '~를 통해/통하여' → '~에서'
+   - '~에 있어서' → 삭제
+   - '~적(的)으로' → 삭제 또는 쉬운 표현으로
+7. 핵심 정보 앞에 배치, 한 문장에 하나의 정보
+
+원본: "${text}"
+
+[예시]
+원문: "필수약관 미동의시 사용이 불가합니다."
+→ "필수약관은 반드시 동의해야 합니다."
+
+원문: "간편비밀번호를 등록하시면 편리하게 이용하실 수 있습니다."
+→ "간편비밀번호를 등록하고 편리하게 이용해보세요."
+
+JSON만 반환:
+{
+  "sinhan": "변환된 텍스트"
 }`;
 }
 

@@ -15,7 +15,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 960px;
             margin: 0 auto;
         }
 
@@ -25,15 +25,15 @@
         }
 
         h1 {
-            font-size: 28px;
+            font-size: 26px;
             color: #1a1a1a;
             font-weight: 700;
             margin-bottom: 6px;
         }
 
         .subtitle {
-            font-size: 14px;
-            color: #888;
+            font-size: 13px;
+            color: #999;
         }
 
         /* Input */
@@ -42,13 +42,15 @@
             border-radius: 12px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
             padding: 20px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .input-label {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
-            color: #555;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-bottom: 10px;
         }
 
@@ -60,7 +62,7 @@
             font-size: 14px;
             font-family: inherit;
             resize: vertical;
-            min-height: 100px;
+            min-height: 90px;
             line-height: 1.6;
             color: #1a1a1a;
         }
@@ -82,73 +84,61 @@
         }
         .error-message.show { display: block; }
 
-        /* Tabs */
-        .tabs {
+        /* Brand section */
+        .brand-section {
+            margin-bottom: 20px;
+        }
+
+        .brand-header {
             display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
         }
 
-        .tab-btn {
-            padding: 10px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: white;
-            color: #888;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        .brand-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1a1a;
         }
 
-        .tab-btn.active {
-            background: #0066ff;
-            color: white;
-            box-shadow: 0 2px 8px rgba(0,102,255,0.3);
+        .brand-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
         }
 
-        .tab-btn:not(.active):hover {
-            background: #f0f5ff;
-            color: #0066ff;
+        .brand-dot.kb { background: #FFB800; }
+        .brand-dot.toss { background: #0066FF; }
+        .brand-dot.sinhan { background: #004B9B; }
+
+        .brand-line {
+            flex: 1;
+            height: 1px;
+            background: #e8e8e8;
         }
 
-        /* Results panel */
-        .results-panel {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-            padding: 20px;
-        }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
+        /* Results grid */
         .results-grid {
             display: grid;
             gap: 12px;
         }
 
-        .results-grid.kb-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-
-        .results-grid.toss-grid {
-            grid-template-columns: 1fr;
-        }
+        .grid-4 { grid-template-columns: 1fr 1fr; }
+        .grid-1 { grid-template-columns: 1fr; }
 
         .result-item {
-            background: #fafafa;
+            background: white;
             border: 1px solid #e8e8e8;
             border-radius: 10px;
             padding: 16px;
-            transition: all 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         .result-item:hover {
-            background: #fff;
-            border-color: #0066ff;
-            box-shadow: 0 2px 8px rgba(0,102,255,0.08);
+            border-color: #c0c0c0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
         .result-header {
@@ -161,14 +151,12 @@
             font-size: 11px;
             font-weight: 700;
             letter-spacing: 0.4px;
-            text-transform: uppercase;
-            color: #0066ff;
+            color: #555;
         }
 
         .result-badge {
             font-size: 11px;
-            font-weight: 500;
-            color: #888;
+            color: #bbb;
             margin-left: 8px;
         }
 
@@ -176,7 +164,7 @@
             background: none;
             border: none;
             cursor: pointer;
-            color: #ccc;
+            color: #ddd;
             padding: 4px;
             display: flex;
             align-items: center;
@@ -196,27 +184,13 @@
             min-height: 22px;
         }
 
-        .result-text.placeholder {
-            color: #bbb;
+        .result-text.muted {
+            color: #ccc;
             font-size: 13px;
         }
 
-        .loading-text {
-            color: #aaa;
-            font-size: 13px;
-        }
-
-        /* Toss special */
-        .toss-result .result-item {
-            padding: 24px;
-        }
-
-        .toss-result .result-text {
-            font-size: 17px;
-        }
-
-        @media (max-width: 600px) {
-            .results-grid.kb-grid { grid-template-columns: 1fr; }
+        @media (max-width: 580px) {
+            .grid-4 { grid-template-columns: 1fr; }
             h1 { font-size: 22px; }
         }
     </style>
@@ -225,7 +199,7 @@
     <div class="container">
         <header>
             <h1>UX Writing 변환기</h1>
-            <p class="subtitle">KB · Toss 가이드라인 기반 문구 변환</p>
+            <p class="subtitle">KB · Toss · 신한카드 가이드라인 기반 문구 변환</p>
         </header>
 
         <div class="input-panel">
@@ -234,74 +208,95 @@
             <div class="error-message" id="errorMsg"></div>
         </div>
 
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('kb')">KB국민은행</button>
-            <button class="tab-btn" onclick="switchTab('toss')">Toss</button>
-        </div>
-
-        <div class="results-panel">
-            <!-- KB Tab -->
-            <div class="tab-content active" id="tab-kb">
-                <div class="results-grid kb-grid">
-                    <div class="result-item">
-                        <div class="result-header">
-                            <span class="result-label">하십시오체</span>
-                            <span class="result-badge">공지·정책·약관</span>
-                            <button class="copy-btn" onclick="copyText(event, 'hapsyo')" title="복사">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                            </button>
-                        </div>
-                        <div class="result-text placeholder" id="hapsyo">입력 대기 중...</div>
+        <!-- KB Section -->
+        <div class="brand-section">
+            <div class="brand-header">
+                <div class="brand-dot kb"></div>
+                <span class="brand-name">KB국민은행</span>
+                <div class="brand-line"></div>
+            </div>
+            <div class="results-grid grid-4">
+                <div class="result-item">
+                    <div class="result-header">
+                        <span class="result-label">하십시오체</span>
+                        <span class="result-badge">공지·정책·약관</span>
+                        <button class="copy-btn" onclick="copyText(event, 'hapsyo')" title="복사">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
                     </div>
-
-                    <div class="result-item">
-                        <div class="result-header">
-                            <span class="result-label">해요체</span>
-                            <span class="result-badge">마케팅·행동 유도</span>
-                            <button class="copy-btn" onclick="copyText(event, 'haeyo')" title="복사">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                            </button>
-                        </div>
-                        <div class="result-text placeholder" id="haeyo">입력 대기 중...</div>
+                    <div class="result-text muted" id="hapsyo">입력 대기 중...</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-header">
+                        <span class="result-label">해요체</span>
+                        <span class="result-badge">마케팅·행동 유도</span>
+                        <button class="copy-btn" onclick="copyText(event, 'haeyo')" title="복사">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
                     </div>
-
-                    <div class="result-item">
-                        <div class="result-header">
-                            <span class="result-label">명사형</span>
-                            <span class="result-badge">제목·버튼·배너</span>
-                            <button class="copy-btn" onclick="copyText(event, 'noun')" title="복사">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                            </button>
-                        </div>
-                        <div class="result-text placeholder" id="noun">입력 대기 중...</div>
+                    <div class="result-text muted" id="haeyo">입력 대기 중...</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-header">
+                        <span class="result-label">명사형</span>
+                        <span class="result-badge">제목·버튼·배너</span>
+                        <button class="copy-btn" onclick="copyText(event, 'noun')" title="복사">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
                     </div>
-
-                    <div class="result-item">
-                        <div class="result-header">
-                            <span class="result-label">반말</span>
-                            <span class="result-badge">고객 1인칭·이벤트</span>
-                            <button class="copy-btn" onclick="copyText(event, 'banmal')" title="복사">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                            </button>
-                        </div>
-                        <div class="result-text placeholder" id="banmal">입력 대기 중...</div>
+                    <div class="result-text muted" id="noun">입력 대기 중...</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-header">
+                        <span class="result-label">반말</span>
+                        <span class="result-badge">고객 1인칭·이벤트</span>
+                        <button class="copy-btn" onclick="copyText(event, 'banmal')" title="복사">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
                     </div>
+                    <div class="result-text muted" id="banmal">입력 대기 중...</div>
                 </div>
             </div>
+        </div>
 
-            <!-- Toss Tab -->
-            <div class="tab-content" id="tab-toss">
-                <div class="results-grid toss-grid toss-result">
-                    <div class="result-item">
-                        <div class="result-header">
-                            <span class="result-label">Toss 스타일</span>
-                            <span class="result-badge">해요체 · 능동형 · 긍정형 · 캐주얼 경어</span>
-                            <button class="copy-btn" onclick="copyText(event, 'toss')" title="복사">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                            </button>
-                        </div>
-                        <div class="result-text placeholder" id="toss">입력 대기 중...</div>
+        <!-- Toss Section -->
+        <div class="brand-section">
+            <div class="brand-header">
+                <div class="brand-dot toss"></div>
+                <span class="brand-name">Toss</span>
+                <div class="brand-line"></div>
+            </div>
+            <div class="results-grid grid-1">
+                <div class="result-item">
+                    <div class="result-header">
+                        <span class="result-label">토스 스타일</span>
+                        <span class="result-badge">해요체 · 능동형 · 긍정형 · 캐주얼 경어</span>
+                        <button class="copy-btn" onclick="copyText(event, 'toss')" title="복사">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
                     </div>
+                    <div class="result-text muted" id="toss">입력 대기 중...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sinhan Section -->
+        <div class="brand-section">
+            <div class="brand-header">
+                <div class="brand-dot sinhan"></div>
+                <span class="brand-name">신한카드</span>
+                <div class="brand-line"></div>
+            </div>
+            <div class="results-grid grid-1">
+                <div class="result-item">
+                    <div class="result-header">
+                        <span class="result-label">신한카드 스타일</span>
+                        <span class="result-badge">하십시오체 기반 · 긍정형 · 간결</span>
+                        <button class="copy-btn" onclick="copyText(event, 'sinhan')" title="복사">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                    </div>
+                    <div class="result-text muted" id="sinhan">입력 대기 중...</div>
                 </div>
             </div>
         </div>
@@ -310,10 +305,7 @@
     <script>
         const inputText = document.getElementById('inputText');
         const errorMsg = document.getElementById('errorMsg');
-
-        let activeTab = 'kb';
-        let kbResults = null;
-        let tossResults = null;
+        const allIds = ['hapsyo', 'haeyo', 'noun', 'banmal', 'toss', 'sinhan'];
 
         inputText.addEventListener('input', debounce(convertAll, 400));
 
@@ -325,70 +317,46 @@
             };
         }
 
-        function switchTab(tab) {
-            activeTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            document.getElementById('tab-' + tab).classList.add('active');
-        }
-
         async function convertAll() {
             const text = inputText.value.trim();
             errorMsg.classList.remove('show');
 
-            const placeholder = '입력 대기 중...';
-
             if (!text) {
-                ['hapsyo', 'haeyo', 'noun', 'banmal', 'toss'].forEach(id => {
-                    const el = document.getElementById(id);
-                    el.textContent = placeholder;
-                    el.className = 'result-text placeholder';
-                });
-                kbResults = null;
-                tossResults = null;
+                allIds.forEach(id => setPlaceholder(id, '입력 대기 중...'));
                 return;
             }
 
-            // 로딩 상태
-            ['hapsyo', 'haeyo', 'noun', 'banmal'].forEach(id => {
-                const el = document.getElementById(id);
-                el.textContent = '변환 중...';
-                el.className = 'result-text loading-text';
-            });
-            const tossEl = document.getElementById('toss');
-            tossEl.textContent = '변환 중...';
-            tossEl.className = 'result-text loading-text';
+            allIds.forEach(id => setPlaceholder(id, '변환 중...'));
 
-            // KB, Toss 동시 요청
-            const [kbRes, tossRes] = await Promise.allSettled([
+            const [kbRes, tossRes, sinhanRes] = await Promise.allSettled([
                 fetchConvert(text, 'kb'),
-                fetchConvert(text, 'toss')
+                fetchConvert(text, 'toss'),
+                fetchConvert(text, 'sinhan')
             ]);
 
             if (kbRes.status === 'fulfilled') {
-                kbResults = kbRes.value;
-                setResult('hapsyo', kbResults.hapsyo);
-                setResult('haeyo', kbResults.haeyo);
-                setResult('noun', kbResults.noun);
-                setResult('banmal', kbResults.banmal);
+                const r = kbRes.value;
+                setResult('hapsyo', r.hapsyo);
+                setResult('haeyo', r.haeyo);
+                setResult('noun', r.noun);
+                setResult('banmal', r.banmal);
             } else {
-                ['hapsyo', 'haeyo', 'noun', 'banmal'].forEach(id => {
-                    const el = document.getElementById(id);
-                    el.textContent = '변환 실패';
-                    el.className = 'result-text placeholder';
-                });
+                ['hapsyo', 'haeyo', 'noun', 'banmal'].forEach(id => setPlaceholder(id, '변환 실패'));
             }
 
             if (tossRes.status === 'fulfilled') {
-                tossResults = tossRes.value;
-                setResult('toss', tossResults.toss);
+                setResult('toss', tossRes.value.toss);
             } else {
-                tossEl.textContent = '변환 실패';
-                tossEl.className = 'result-text placeholder';
+                setPlaceholder('toss', '변환 실패');
             }
 
-            if (kbRes.status === 'rejected' && tossRes.status === 'rejected') {
+            if (sinhanRes.status === 'fulfilled') {
+                setResult('sinhan', sinhanRes.value.sinhan);
+            } else {
+                setPlaceholder('sinhan', '변환 실패');
+            }
+
+            if ([kbRes, tossRes, sinhanRes].every(r => r.status === 'rejected')) {
                 errorMsg.textContent = '⚠️ 서버 연결 실패. 잠시 후 다시 시도해주세요.';
                 errorMsg.classList.add('show');
             }
@@ -408,6 +376,12 @@
             const el = document.getElementById(id);
             el.textContent = text || '';
             el.className = 'result-text';
+        }
+
+        function setPlaceholder(id, text) {
+            const el = document.getElementById(id);
+            el.textContent = text;
+            el.className = 'result-text muted';
         }
 
         const copyIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
