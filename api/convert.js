@@ -36,7 +36,7 @@ module.exports = async function handler(req, res) {
                     'Authorization': `Bearer ${apiKey}`
                 },
                 body: JSON.stringify({
-                    model: 'llama-3.1-8b-instant',
+                    model: 'llama-3.3-70b-versatile',
                     messages: [{ role: 'user', content: prompt }],
                     temperature: 0.7
                 })
